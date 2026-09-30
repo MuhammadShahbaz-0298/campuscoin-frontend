@@ -1,0 +1,276 @@
+.enter-in {
+  animation: enterIn 0.45s var(--ease-out) backwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@keyframes enterIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.enter-row {
+  animation: enterRow 0.4s var(--ease-out) backwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@keyframes enterRow {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.enter-badge {
+  animation: enterBadge 0.35s var(--ease-out) backwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@keyframes enterBadge {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.content > .dash-entrance {
+  animation: none;
+}
+
+.content > .enter-in {
+  animation: enterIn 0.45s var(--ease-out) backwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+.topbar {
+  animation: enterIn 0.4s var(--ease-out) backwards;
+}
+
+.animated-number {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+.animated-number.money-settle {
+  animation: moneySettle 0.42s var(--ease-out);
+}
+
+@keyframes moneySettle {
+  0% {
+    transform: translateY(-2px);
+    opacity: 0.78;
+  }
+  55% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.progress i {
+  position: relative;
+  transition: width 1s var(--ease-out);
+}
+
+.progress i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0.06) 48%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+body[data-theme="light"] .progress i {
+  box-shadow: 0 1px 4px rgba(15, 143, 112, 0.28);
+}
+
+.progress-complete i {
+  animation: progressPulseOnce 0.65s var(--ease-out) 1;
+}
+
+@keyframes progressPulseOnce {
+  0% {
+    filter: brightness(1);
+  }
+  40% {
+    filter: brightness(1.16);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.bar i,
+.progress i {
+  transition: width 1s var(--ease-out);
+}
+
+@starting-style {
+  .bar i,
+  .progress i {
+    width: 0;
+  }
+}
+
+.stat-card,
+.panel {
+  transition:
+    background var(--duration) ease,
+    border-color var(--duration) ease,
+    transform 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-out);
+}
+
+.stat-card:hover,
+.panel:hover {
+  transform: translateY(-2px);
+}
+
+.primary svg,
+.secondary svg,
+.danger-button svg,
+.quick svg {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.primary:hover svg,
+.secondary:hover svg,
+.danger-button:hover svg,
+.quick:hover svg {
+  transform: translateY(-1px);
+}
+
+.nav-item.active svg {
+  filter: brightness(1.12);
+}
+
+.toast-success svg:first-child {
+  animation: checkPop 0.35s var(--ease-out) both;
+}
+
+@keyframes checkPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.toast.toast-exit {
+  animation: toastOut 0.18s var(--ease-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 5px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-in,
+  .enter-row,
+  .enter-badge,
+  .topbar {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .progress i,
+  .bar i {
+    transition: none !important;
+  }
+  .progress-complete i,
+  .toast-success svg:first-child,
+  .animated-number.money-settle {
+    animation: none !important;
+  }
+  .stat-card:hover,
+  .panel:hover,
+  .budget-card:hover {
+    transform: none !important;
+  }
+  .primary:hover,
+  .secondary:hover,
+  .danger-button:hover,
+  .quick:hover,
+  .primary:hover svg,
+  .secondary:hover svg,
+  .danger-button:hover svg,
+  .quick:hover svg {
+    transform: none !important;
+  }
+  .toast.toast-exit {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
