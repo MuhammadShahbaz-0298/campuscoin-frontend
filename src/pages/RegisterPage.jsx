@@ -7,7 +7,6 @@ import ThemeToggle from "../components/layout/ThemeToggle";
 import { registerUser } from "../api/authApi";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import getErrorMessage from "../utils/getErrorMessage";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
