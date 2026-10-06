@@ -1,118 +1,117 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import AuthBrandPanel from "../components/auth/AuthBrandPanel";
-import DemoCredentials from "../components/auth/DemoCredentials";
-import LoginForm from "../components/auth/LoginForm";
-import ThemeToggle from "../components/layout/ThemeToggle";
-import { loginUser } from "../api/authApi";
-import { useAuth } from "../context/AuthContext";
-import { useToast } from "../context/ToastContext";
-import getErrorMessage from "../utils/getErrorMessage";
 
-function readRememberPreference() {
-  try {
-    return localStorage.getItem("cc_remember") !== "0";
-  } catch (error) {
-    return true;
-  }
-}
+// Self-contained: the only import is "react", so Vite can always resolve it.
+// Replace the TODO in handleSubmit with your real auth call.
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#f5f6f8",
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
+    padding: 16,
+  },
+  card: {
+    width: "100%",
+    maxWidth: 380,
+    background: "#fff",
+    borderRadius: 12,
+    padding: 28,
+    boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+  },
+  title: { margin: "0 0 4px", fontSize: 24 },
+  sub: { margin: "0 0 20px", color: "#666", fontSize: 14 },
+  label: { display: "block", fontSize: 13, margin: "12px 0 4px" },
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "10px 12px",
+    fontSize: 16,
+    border: "1px solid #ccc",
+    borderRadius: 8,
+  },
+  button: {
+    width: "100%",
+    marginTop: 20,
+    padding: "11px 0",
+    fontSize: 16,
+    color: "#fff",
+    background: "#2f5bea",
+    border: "none",
+    borderRadius: 8,
+    cursor: "pointer",
+  },
+  error: { color: "#c0392b", fontSize: 14, marginTop: 12 },
+};
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [remember, setRemember] = useState(readRememberPreference);
-  const [submitting, setSubmitting] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [attempt, setAttempt] = useState(0);
-  const [demoVisible, setDemoVisible] = useState(true);
-  const { login } = useAuth();
-  const { showToast } = useToast();
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onChange = (field, value) => setForm((current) => ({ ...current, [field]: value }));
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
 
-  const onRememberChange = (checked) => {
-    setRemember(checked);
-    try {
-      localStorage.setItem("cc_remember", checked ? "1" : "0");
-    } catch (error) {
-      /* ignore */
+    if (!email || !password) {
+      setError("Enter your email and password.");
+      return;
     }
-  };
 
-  async function submit() {
-    if (submitting) return;
-    setServerError("");
-    setAttempt((current) => current + 1);
-    setSubmitting(true);
+    setLoading(true);
     try {
-      const response = await loginUser(form);
-      login(response.data, remember);
-      showToast("Welcome back.", "success");
-      navigate("/");
-    } catch (error) {
-      const message = getErrorMessage(error, "Unable to sign in.");
-      setServerError(message);
-      showToast(message, "error");
+      // TODO: call your real login API here, e.g.
+      // const res = await fetch("/api/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ email, password }),
+      // });
+      // if (!res.ok) throw new Error("Wrong email or password.");
+      console.log("Login submitted for", email);
+    } catch (err) {
+      setError(err.message || "Login failed. Try again.");
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
-  }
-
-  function handleForgot() {
-    showToast(
-      "Password resets aren't enabled in this demo — use the student account below.",
-      "info",
-    );
   }
 
   return (
-    <main className="auth-split">
-      <AuthBrandPanel />
+    <div style={styles.page}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>Log in</h1>
+        <p style={styles.sub}>Welcome back.</p>
 
-      <section className="auth-form-panel" aria-labelledby="login-heading">
-        <div className="auth-toolbar">
-          <ThemeToggle />
-        </div>
-
-        <div className="auth-form-wrap">
-          <span className="auth-logo sx-enter" style={{ "--d": "0ms" }}>
-            <span className="auth-mark" aria-hidden="true">
-              <img src="/logo-mark.png" alt="" width="34" height="34" />
-            </span>
-            <span>Campus Coin</span>
-          </span>
-
-          <p className="auth-eyebrow sx-enter" style={{ "--d": "80ms" }}>
-            Smart spending, student style
-          </p>
-          <h1 id="login-heading" className="sx-enter" style={{ "--d": "140ms" }}>
-            Welcome back.
-          </h1>
-          <p className="auth-sub sx-enter" style={{ "--d": "210ms" }}>
-            Your student budget, habits, and next best move in one place.
-          </p>
-
-          <LoginForm
-            values={form}
-            onChange={onChange}
-            onSubmit={submit}
-            submitting={submitting}
-            serverError={serverError}
-            attempt={attempt}
-            remember={remember}
-            onRememberChange={onRememberChange}
-            onForgot={handleForgot}
+        <form onSubmit={handleSubmit}>
+          <label style={styles.label} htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            style={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
-          <p className="auth-alt sx-enter" style={{ "--d": "600ms" }}>
-            New to Campus Coin? <Link to="/register">Create an account</Link>
-          </p>
+          <label style={styles.label} htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            style={styles.input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          {demoVisible ? (
-            <DemoCredentials onDismiss={() => setDemoVisible(false)} />
-          ) : null}
-        </div>
-      </section>
-    </main>
+          {error && <div style={styles.error}>{error}</div>}
+
+          <button type="submit" style={styles.button} disabled={loading}>
+            {loading ? "Logging in..." : "Log in"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
